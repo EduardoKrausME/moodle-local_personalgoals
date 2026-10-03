@@ -24,6 +24,7 @@
 
 namespace local_personalgoals\service;
 
+use core\event\base;
 use dml_write_exception;
 
 defined('MOODLE_INTERNAL') || die();
@@ -35,10 +36,10 @@ final class event_dedupe {
     /**
      * Method claim.
      *
-     * @param \core\event\base $event Parameter event.
+     * @param base $event Parameter event.
      * @return bool Return value.
      */
-    public static function claim(\core\event\base $event): bool {
+    public static function claim(base $event): bool {
         global $DB;
         $data = $event->get_data();
         if (!empty($data['id'])) {

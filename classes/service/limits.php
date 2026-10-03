@@ -24,6 +24,9 @@
 
 namespace local_personalgoals\service;
 
+use moodle_exception;
+use stdClass;
+
 defined('MOODLE_INTERNAL') || die();
 
 /**
@@ -35,9 +38,9 @@ final class limits {
      *
      * @param int $courseid Parameter courseid.
      * @param string $goaltype Parameter goaltype.
-     * @return \stdClass Return value.
+     * @return stdClass Return value.
      */
-    public static function get(int $courseid, string $goaltype): \stdClass {
+    public static function get(int $courseid, string $goaltype): stdClass {
         global $DB;
         $record = $DB->get_record('local_personalgoals_limits', [
             'courseid' => $courseid,
@@ -83,24 +86,24 @@ final class limits {
         global $DB;
         $limit = self::get($courseid, $goaltype);
         if (!(int)$limit->enabled) {
-            throw new \moodle_exception('goaltypenotallowed', 'local_personalgoals');
+            throw new moodle_exception('goaltypenotallowed', 'local_personalgoals');
         }
         if ($target < (float)$limit->mintarget || $target > (float)$limit->maxtarget) {
-            throw new \moodle_exception('targetoutsideallowedrange', 'local_personalgoals', '', (object)[
+            throw new moodle_exception('targetoutsideallowedrange', 'local_personalgoals', '', (object)[
                 'min' => $limit->mintarget,
                 'max' => $limit->maxtarget,
             ]);
         }
         if ($periodtype === 'custom' && !(int)$limit->allowcustomdates) {
-            throw new \moodle_exception('customdatesnotallowed', 'local_personalgoals');
+            throw new moodle_exception('customdatesnotallowed', 'local_personalgoals');
         }
         if ($timeend > 0 && $timeend <= $timestart) {
-            throw new \moodle_exception('invaliddeadline', 'local_personalgoals');
+            throw new moodle_exception('invaliddeadline', 'local_personalgoals');
         }
         if ($timeend > 0 && (int)$limit->maxdurationdays > 0) {
             $days = ($timeend - $timestart) / DAYSECS;
             if ($days > (int)$limit->maxdurationdays) {
-                throw new \moodle_exception('durationtoolong', 'local_personalgoals', '', (int)$limit->maxdurationdays);
+                throw new moodle_exception('durationtoolong', 'local_personalgoals', '', (int)$limit->maxdurationdays);
             }
         }
         $active = $DB->count_records('local_personalgoals_goals', [
@@ -110,7 +113,7 @@ final class limits {
             'status' => 'active',
         ]);
         if ((int)$limit->maxactive > 0 && $active >= (int)$limit->maxactive) {
-            throw new \moodle_exception('maxactivegoalsreached', 'local_personalgoals', '', (int)$limit->maxactive);
+            throw new moodle_exception('maxactivegoalsreached', 'local_personalgoals', '', (int)$limit->maxactive);
         }
     }
 }

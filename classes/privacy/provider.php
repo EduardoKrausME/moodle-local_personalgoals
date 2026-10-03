@@ -24,6 +24,8 @@
 
 namespace local_personalgoals\privacy;
 
+use context;
+use context_course;
 use core_privacy\local\metadata\collection;
 use core_privacy\local\request\approved_contextlist;
 use core_privacy\local\request\contextlist;
@@ -122,7 +124,7 @@ final class provider implements
         global $DB;
         $userid = $contextlist->get_user()->id;
         foreach ($contextlist as $context) {
-            if (!$context instanceof \context_course) {
+            if (!$context instanceof context_course) {
                 continue;
             }
             $courseid = $context->instanceid;
@@ -161,12 +163,12 @@ final class provider implements
     /**
      * Method delete_data_for_all_users_in_context.
      *
-     * @param \context $context Parameter context.
+     * @param context $context Parameter context.
      * @return void Return value.
      */
-    public static function delete_data_for_all_users_in_context(\context $context): void {
+    public static function delete_data_for_all_users_in_context(context $context): void {
         global $DB;
-        if (!$context instanceof \context_course) {
+        if (!$context instanceof context_course) {
             return;
         }
         self::delete_for_course($context->instanceid, null);
@@ -181,7 +183,7 @@ final class provider implements
     public static function delete_data_for_user(approved_contextlist $contextlist): void {
         $userid = $contextlist->get_user()->id;
         foreach ($contextlist as $context) {
-            if ($context instanceof \context_course) {
+            if ($context instanceof context_course) {
                 self::delete_for_course($context->instanceid, $userid);
             }
         }

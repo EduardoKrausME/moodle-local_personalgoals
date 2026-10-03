@@ -24,13 +24,15 @@
 
 namespace local_personalgoals\form;
 
+use moodleform;
+
 defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . '/formslib.php');
 
 /**
  * Class limit_form.
  */
-final class limit_form extends \moodleform {
+final class limit_form extends moodleform {
     /**
      * Method definition.
      *

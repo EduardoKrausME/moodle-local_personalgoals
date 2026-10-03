@@ -24,6 +24,8 @@
 
 namespace local_personalgoals\service;
 
+use JsonException;
+
 defined('MOODLE_INTERNAL') || die();
 
 /**
@@ -43,7 +45,7 @@ final class json {
         try {
             $decoded = json_decode($value, true, 512, JSON_THROW_ON_ERROR);
             return is_array($decoded) ? $decoded : [];
-        } catch (\JsonException $e) {
+        } catch (JsonException $e) {
             return [];
         }
     }

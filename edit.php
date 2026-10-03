@@ -24,6 +24,7 @@
 
 require_once('../../config.php');
 
+use core\output\notification;
 use local_personalgoals\api;
 use local_personalgoals\form\goal_form;
 
@@ -60,7 +61,7 @@ if ($data = $form->get_data()) {
         new moodle_url('/local/personalgoals/index.php', ['courseid' => $courseid]),
         get_string('goalcreated', 'local_personalgoals'),
         null,
-        \core\output\notification::NOTIFY_SUCCESS
+        notification::NOTIFY_SUCCESS
     );
 }
 

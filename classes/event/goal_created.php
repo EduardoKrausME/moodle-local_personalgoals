@@ -24,12 +24,15 @@
 
 namespace local_personalgoals\event;
 
+use core\event\base;
+use moodle_url;
+
 defined('MOODLE_INTERNAL') || die();
 
 /**
  * Class goal_created.
  */
-final class goal_created extends \core\event\base {
+final class goal_created extends base {
     /**
      * Method init.
      *
@@ -57,10 +60,10 @@ final class goal_created extends \core\event\base {
     /**
      * Method get_url.
      *
-     * @return \moodle_url Return value.
+     * @return moodle_url Return value.
      */
-    public function get_url(): \moodle_url {
-        return new \moodle_url('/local/personalgoals/index.php', ['courseid' => $this->courseid]);
+    public function get_url(): moodle_url {
+        return new moodle_url('/local/personalgoals/index.php', ['courseid' => $this->courseid]);
     }
     /**
      * Method get_objectid_mapping.

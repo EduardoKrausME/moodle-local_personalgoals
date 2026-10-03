@@ -25,6 +25,7 @@
 namespace local_personalgoals\service;
 
 use dml_write_exception;
+use stdClass;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -36,9 +37,9 @@ final class progress {
      * Method get_record.
      *
      * @param int $goalid Parameter goalid.
-     * @return \stdClass Return value.
+     * @return stdClass Return value.
      */
-    public static function get_record(int $goalid): \stdClass {
+    public static function get_record(int $goalid): stdClass {
         global $DB;
         $record = $DB->get_record('local_personalgoals_progress', ['goalid' => $goalid]);
         if ($record) {

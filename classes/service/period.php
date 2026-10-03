@@ -24,6 +24,7 @@
 
 namespace local_personalgoals\service;
 
+use core_date;
 use DateTimeImmutable;
 use DateTimeZone;
 
@@ -49,7 +50,7 @@ final class period {
 
         $reference = $reference ?? time();
         $user = $DB->get_record('user', ['id' => $userid], 'id,timezone', MUST_EXIST);
-        $tzname = \core_date::get_user_timezone($user);
+        $tzname = core_date::get_user_timezone($user);
         $timezone = new DateTimeZone($tzname);
         $now = (new DateTimeImmutable('@' . $reference))->setTimezone($timezone);
         $start = $reference;
@@ -88,7 +89,7 @@ final class period {
     public static function day_key(int $timestamp, int $userid): string {
         global $DB;
         $user = $DB->get_record('user', ['id' => $userid], 'id,timezone', MUST_EXIST);
-        $timezone = new DateTimeZone(\core_date::get_user_timezone($user));
+        $timezone = new DateTimeZone(core_date::get_user_timezone($user));
         return (new DateTimeImmutable('@' . $timestamp))->setTimezone($timezone)->format('Ymd');
     }
 }

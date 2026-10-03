@@ -25,6 +25,8 @@
 namespace local_personalgoals\service;
 
 use local_personalgoals\api;
+use moodle_url;
+use stdClass;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -35,10 +37,10 @@ final class presenter {
     /**
      * Method goal.
      *
-     * @param \stdClass $goal Parameter goal.
+     * @param stdClass $goal Parameter goal.
      * @return array Return value.
      */
-    public static function goal(\stdClass $goal): array {
+    public static function goal(stdClass $goal): array {
         global $DB;
         $state = refresh::goal($goal);
         $course = $DB->get_record('course', ['id' => $goal->courseid], 'id,fullname', MUST_EXIST);
@@ -69,10 +71,10 @@ final class presenter {
                 'current' => $current,
                 'target' => $target,
             ]),
-            'cancelurl' => (new \moodle_url('/local/personalgoals/action.php', [
+            'cancelurl' => (new moodle_url('/local/personalgoals/action.php', [
                 'action' => 'cancel', 'id' => $goal->id, 'sesskey' => sesskey(),
             ]))->out(false),
-            'repeaturl' => (new \moodle_url('/local/personalgoals/action.php', [
+            'repeaturl' => (new moodle_url('/local/personalgoals/action.php', [
                 'action' => 'repeat', 'id' => $goal->id, 'sesskey' => sesskey(),
             ]))->out(false),
         ];

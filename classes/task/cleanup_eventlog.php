@@ -24,12 +24,14 @@
 
 namespace local_personalgoals\task;
 
+use core\task\scheduled_task;
+
 defined('MOODLE_INTERNAL') || die();
 
 /**
  * Class cleanup_eventlog.
  */
-final class cleanup_eventlog extends \core\task\scheduled_task {
+final class cleanup_eventlog extends scheduled_task {
     /**
      * Method get_name.
      *

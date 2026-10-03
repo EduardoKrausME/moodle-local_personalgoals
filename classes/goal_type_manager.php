@@ -24,6 +24,10 @@
 
 namespace local_personalgoals;
 
+use moodle_exception;
+use stdClass;
+use Throwable;
+
 defined('MOODLE_INTERNAL') || die();
 
 /**
@@ -60,7 +64,7 @@ final class goal_type_manager {
                                 $types[$key] = $classname;
                             }
                         }
-                    } catch (\Throwable $e) {
+                    } catch (Throwable $e) {
                         debugging('Unable to load personal goal type provider: ' . $e->getMessage(), DEBUG_DEVELOPER);
                     }
                 }
@@ -132,13 +136,13 @@ final class goal_type_manager {
     /**
      * Method for_goal.
      *
-     * @param \stdClass $goal Parameter goal.
+     * @param stdClass $goal Parameter goal.
      * @return goal_type_interface Return value.
      */
-    public static function for_goal(\stdClass $goal): goal_type_interface {
+    public static function for_goal(stdClass $goal): goal_type_interface {
         $types = self::get_types();
         if (!isset($types[$goal->goaltype])) {
-            throw new \moodle_exception('unknowngoaltype', 'local_personalgoals', '', $goal->goaltype);
+            throw new moodle_exception('unknowngoaltype', 'local_personalgoals', '', $goal->goaltype);
         }
         $classname = $types[$goal->goaltype];
         return new $classname($goal);

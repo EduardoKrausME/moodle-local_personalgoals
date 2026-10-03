@@ -25,6 +25,7 @@
 namespace local_personalgoals\form;
 
 use local_personalgoals\api;
+use moodleform;
 
 defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . '/formslib.php');
@@ -32,7 +33,7 @@ require_once($CFG->libdir . '/formslib.php');
 /**
  * Class goal_form.
  */
-final class goal_form extends \moodleform {
+final class goal_form extends moodleform {
     /**
      * Method definition.
      *

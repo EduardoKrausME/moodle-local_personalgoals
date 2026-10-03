@@ -24,6 +24,8 @@
 
 namespace local_personalgoals;
 
+use advanced_testcase;
+use context_course;
 use local_personalgoals\service\event_dedupe;
 
 defined('MOODLE_INTERNAL') || die();
@@ -31,7 +33,7 @@ defined('MOODLE_INTERNAL') || die();
 /**
  * Class event_dedupe_test.
  */
-final class event_dedupe_test extends \advanced_testcase {
+final class event_dedupe_test extends advanced_testcase {
     /**
      * Method test_same_event_is_processed_only_once.
      *
@@ -42,7 +44,7 @@ final class event_dedupe_test extends \advanced_testcase {
         $course = $this->getDataGenerator()->create_course();
         $user = $this->getDataGenerator()->create_user();
         $event = event\goal_created::create([
-            'context' => \context_course::instance($course->id),
+            'context' => context_course::instance($course->id),
             'objectid' => 12345,
             'relateduserid' => $user->id,
             'other' => ['goaltype' => 'activity_completion'],

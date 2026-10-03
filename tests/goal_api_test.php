@@ -24,6 +24,10 @@
 
 namespace local_personalgoals;
 
+use advanced_testcase;
+use completion_completion;
+use DateTimeImmutable;
+use DateTimeZone;
 use local_personalgoals\service\json;
 use local_personalgoals\service\period;
 use local_personalgoals\service\progress;
@@ -36,7 +40,7 @@ defined('MOODLE_INTERNAL') || die();
  *
  * @coversDefaultClass \\local_personalgoals\\api
  */
-final class goal_api_test extends \advanced_testcase {
+final class goal_api_test extends advanced_testcase {
     /**
      * Method create_student_course.
      *
@@ -85,12 +89,12 @@ final class goal_api_test extends \advanced_testcase {
     public function test_weekly_period_ends_on_user_local_sunday(): void {
         $this->resetAfterTest(true);
         [$user] = $this->create_student_course(['timezone' => 'America/Sao_Paulo']);
-        $reference = (new \DateTimeImmutable('2026-10-01 10:00:00', new \DateTimeZone('America/Sao_Paulo')))->getTimestamp();
+        $reference = (new DateTimeImmutable('2026-10-01 10:00:00', new DateTimeZone('America/Sao_Paulo')))->getTimestamp();
         [$start, $end] = period::resolve('weekly', $user->id, $reference);
 
         $this->assertSame($reference, $start);
         $this->assertSame(
-            (new \DateTimeImmutable('2026-10-04 23:59:59', new \DateTimeZone('America/Sao_Paulo')))->getTimestamp(),
+            (new DateTimeImmutable('2026-10-04 23:59:59', new DateTimeZone('America/Sao_Paulo')))->getTimestamp(),
             $end
         );
     }
@@ -103,12 +107,12 @@ final class goal_api_test extends \advanced_testcase {
     public function test_monthly_period_ends_on_user_local_last_day(): void {
         $this->resetAfterTest(true);
         [$user] = $this->create_student_course(['timezone' => 'America/Sao_Paulo']);
-        $reference = (new \DateTimeImmutable('2026-10-03 09:00:00', new \DateTimeZone('America/Sao_Paulo')))->getTimestamp();
+        $reference = (new DateTimeImmutable('2026-10-03 09:00:00', new DateTimeZone('America/Sao_Paulo')))->getTimestamp();
         [$start, $end] = period::resolve('monthly', $user->id, $reference);
 
         $this->assertSame($reference, $start);
         $this->assertSame(
-            (new \DateTimeImmutable('2026-10-31 23:59:59', new \DateTimeZone('America/Sao_Paulo')))->getTimestamp(),
+            (new DateTimeImmutable('2026-10-31 23:59:59', new DateTimeZone('America/Sao_Paulo')))->getTimestamp(),
             $end
         );
     }
@@ -123,7 +127,7 @@ final class goal_api_test extends \advanced_testcase {
         $generator = $this->getDataGenerator();
         $east = $generator->create_user(['timezone' => 'Pacific/Kiritimati']);
         $west = $generator->create_user(['timezone' => 'America/Los_Angeles']);
-        $timestamp = (new \DateTimeImmutable('2026-10-03 10:30:00', new \DateTimeZone('UTC')))->getTimestamp();
+        $timestamp = (new DateTimeImmutable('2026-10-03 10:30:00', new DateTimeZone('UTC')))->getTimestamp();
 
         $this->assertSame('20261004', period::day_key($timestamp, $east->id));
         $this->assertSame('20261003', period::day_key($timestamp, $west->id));
@@ -242,7 +246,7 @@ final class goal_api_test extends \advanced_testcase {
         $goal = api::create_goal($user->id, $course->id, 'course_completion', 'Finish the course', 100);
 
         require_once($CFG->dirroot . '/completion/completion_completion.php');
-        $completion = new \completion_completion(['userid' => $user->id, 'course' => $course->id]);
+        $completion = new completion_completion(['userid' => $user->id, 'course' => $course->id]);
         $completion->mark_complete(time());
 
         $updated = $DB->get_record('local_personalgoals_goals', ['id' => $goal->id], '*', MUST_EXIST);

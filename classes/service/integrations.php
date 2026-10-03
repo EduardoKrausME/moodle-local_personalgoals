@@ -24,6 +24,8 @@
 
 namespace local_personalgoals\service;
 
+use stdClass;
+
 defined('MOODLE_INTERNAL') || die();
 
 /**
@@ -48,11 +50,11 @@ final class integrations {
     /**
      * Method award_xp.
      *
-     * @param \stdClass $goal Parameter goal.
+     * @param stdClass $goal Parameter goal.
      * @param int $amount Parameter amount.
      * @return bool Return value.
      */
-    public static function award_xp(\stdClass $goal, int $amount): bool {
+    public static function award_xp(stdClass $goal, int $amount): bool {
         if ($amount <= 0) {
             return false;
         }
@@ -75,11 +77,11 @@ final class integrations {
     /**
      * Method award_credits.
      *
-     * @param \stdClass $goal Parameter goal.
+     * @param stdClass $goal Parameter goal.
      * @param int $amount Parameter amount.
      * @return bool Return value.
      */
-    public static function award_credits(\stdClass $goal, int $amount): bool {
+    public static function award_credits(stdClass $goal, int $amount): bool {
         if ($amount <= 0) {
             return false;
         }
@@ -111,10 +113,10 @@ final class integrations {
     /**
      * Method celebrate.
      *
-     * @param \stdClass $goal Parameter goal.
+     * @param stdClass $goal Parameter goal.
      * @return void Return value.
      */
-    public static function celebrate(\stdClass $goal): void {
+    public static function celebrate(stdClass $goal): void {
         $class = '\\local_xpcelebration\\api';
         if (!class_exists($class) || !method_exists($class, 'queue')) {
             return;

@@ -26,6 +26,7 @@ namespace local_personalgoals\goal_type;
 
 use local_personalgoals\goal_type_interface;
 use local_personalgoals\service\progress;
+use stdClass;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -36,16 +37,16 @@ abstract class base_goal_type implements goal_type_interface {
     /**
      * Property goal.
      *
-     * @var \stdClass
+     * @var stdClass
      */
-    protected \stdClass $goal;
+    protected stdClass $goal;
 
     /**
      * Method __construct.
      *
-     * @param \stdClass $goal Parameter goal.
+     * @param stdClass $goal Parameter goal.
      */
-    public function __construct(\stdClass $goal) {
+    public function __construct(stdClass $goal) {
         $this->goal = $goal;
     }
 

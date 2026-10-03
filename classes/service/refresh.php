@@ -26,6 +26,7 @@ namespace local_personalgoals\service;
 
 use local_personalgoals\api;
 use local_personalgoals\goal_type_manager;
+use stdClass;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -36,11 +37,11 @@ final class refresh {
     /**
      * Method goal.
      *
-     * @param \stdClass $goal Parameter goal.
+     * @param stdClass $goal Parameter goal.
      * @param bool $allowcomplete Parameter allowcomplete.
      * @return array Return value.
      */
-    public static function goal(\stdClass $goal, bool $allowcomplete = true): array {
+    public static function goal(stdClass $goal, bool $allowcomplete = true): array {
         if ($goal->status === 'active' && (int)$goal->timeend > 0 && (int)$goal->timeend < time()) {
             api::expire_goal((int)$goal->id);
             $goal->status = 'expired';

@@ -24,6 +24,7 @@
 
 namespace local_personalgoals\task;
 
+use core\task\scheduled_task;
 use local_personalgoals\api;
 
 defined('MOODLE_INTERNAL') || die();
@@ -31,7 +32,7 @@ defined('MOODLE_INTERNAL') || die();
 /**
  * Class expire_goals.
  */
-final class expire_goals extends \core\task\scheduled_task {
+final class expire_goals extends scheduled_task {
     /**
      * Method get_name.
      *

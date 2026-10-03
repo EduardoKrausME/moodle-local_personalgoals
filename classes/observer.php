@@ -24,11 +24,17 @@
 
 namespace local_personalgoals;
 
+use completion_info;
+use core\event\base;
+use core\event\course_completed;
+use core\event\course_module_completion_updated;
+use core\event\course_module_deleted;
 use local_personalgoals\service\activity_tracking;
 use local_personalgoals\service\event_dedupe;
 use local_personalgoals\service\json;
 use local_personalgoals\service\progress;
 use local_personalgoals\service\refresh;
+use mod_quiz\event\attempt_submitted;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -39,20 +45,20 @@ final class observer {
     /**
      * Method learner_id.
      *
-     * @param \core\event\base $event Parameter event.
+     * @param base $event Parameter event.
      * @return int Return value.
      */
-    private static function learner_id(\core\event\base $event): int {
+    private static function learner_id(base $event): int {
         return (int)($event->relateduserid ?: $event->userid);
     }
 
     /**
      * Method common.
      *
-     * @param \core\event\base $event Parameter event.
+     * @param base $event Parameter event.
      * @return ?array Return value.
      */
-    private static function common(\core\event\base $event): ?array {
+    private static function common(base $event): ?array {
         if (!event_dedupe::claim($event)) {
             return null;
         }
@@ -68,10 +74,10 @@ final class observer {
     /**
      * Method learning_interaction.
      *
-     * @param \core\event\base $event Parameter event.
+     * @param base $event Parameter event.
      * @return void Return value.
      */
-    public static function learning_interaction(\core\event\base $event): void {
+    public static function learning_interaction(base $event): void {
         $ids = self::common($event);
         if (!$ids) {
             return;
@@ -83,10 +89,10 @@ final class observer {
     /**
      * Method course_module_completion_updated.
      *
-     * @param \core\event\course_module_completion_updated $event Parameter event.
+     * @param course_module_completion_updated $event Parameter event.
      * @return void Return value.
      */
-    public static function course_module_completion_updated(\core\event\course_module_completion_updated $event): void {
+    public static function course_module_completion_updated(course_module_completion_updated $event): void {
         global $DB;
         $ids = self::common($event);
         if (!$ids) {
@@ -97,7 +103,7 @@ final class observer {
         $state = $event->other['completionstate'] ?? null;
         if ($state === null) {
             $course = get_course($courseid);
-            $completion = new \completion_info($course);
+            $completion = new completion_info($course);
             $cm = get_fast_modinfo($courseid, $userid)->get_cm($cmid);
             $data = $completion->get_data($cm, false, $userid);
             $state = $data->completionstate;
@@ -133,10 +139,10 @@ final class observer {
     /**
      * Method quiz_attempt_submitted.
      *
-     * @param \mod_quiz\event\attempt_submitted $event Parameter event.
+     * @param attempt_submitted $event Parameter event.
      * @return void Return value.
      */
-    public static function quiz_attempt_submitted(\mod_quiz\event\attempt_submitted $event): void {
+    public static function quiz_attempt_submitted(attempt_submitted $event): void {
         global $DB;
         $ids = self::common($event);
         if (!$ids) {
@@ -165,10 +171,10 @@ final class observer {
     /**
      * Method course_completed.
      *
-     * @param \core\event\course_completed $event Parameter event.
+     * @param course_completed $event Parameter event.
      * @return void Return value.
      */
-    public static function course_completed(\core\event\course_completed $event): void {
+    public static function course_completed(course_completed $event): void {
         $ids = self::common($event);
         if (!$ids) {
             return;
@@ -180,10 +186,10 @@ final class observer {
     /**
      * Method course_module_deleted.
      *
-     * @param \core\event\course_module_deleted $event Parameter event.
+     * @param course_module_deleted $event Parameter event.
      * @return void Return value.
      */
-    public static function course_module_deleted(\core\event\course_module_deleted $event): void {
+    public static function course_module_deleted(course_module_deleted $event): void {
         global $DB;
         if (!event_dedupe::claim($event)) {
             return;

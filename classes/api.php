@@ -24,12 +24,18 @@
 
 namespace local_personalgoals;
 
+use completion_info;
+use context_course;
+use context_system;
 use local_personalgoals\service\integrations;
 use local_personalgoals\service\json;
 use local_personalgoals\service\limits;
 use local_personalgoals\service\period;
 use local_personalgoals\service\progress;
 use local_personalgoals\service\refresh;
+use moodle_exception;
+use required_capability_exception;
+use stdClass;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -53,7 +59,7 @@ final class api {
     public static function get_user_goals(int $userid, ?int $courseid = null, ?string $status = null): array {
         global $DB, $USER;
         if ((int)$USER->id !== $userid && !is_siteadmin()) {
-            throw new \required_capability_exception(\context_system::instance(), 'moodle/site:config', 'nopermissions', '');
+            throw new required_capability_exception(context_system::instance(), 'moodle/site:config', 'nopermissions', '');
         }
         $conditions = ['userid' => $userid];
         if ($courseid !== null && $courseid > 0) {
@@ -75,7 +81,7 @@ final class api {
         global $DB, $USER;
         $goal = $DB->get_record('local_personalgoals_goals', ['id' => $goalid], '*', MUST_EXIST);
         if ((int)$USER->id !== (int)$goal->userid && !is_siteadmin()) {
-            throw new \moodle_exception('cannotviewgoal', 'local_personalgoals');
+            throw new moodle_exception('cannotviewgoal', 'local_personalgoals');
         }
         return refresh::goal($goal);
     }
@@ -92,7 +98,7 @@ final class api {
      * @param string $periodtype Parameter periodtype.
      * @param ?int $customstart Parameter customstart.
      * @param ?int $customend Parameter customend.
-     * @return \stdClass Return value.
+     * @return stdClass Return value.
      */
     public static function create_goal(
         int $userid,
@@ -104,7 +110,7 @@ final class api {
         string $periodtype = 'none',
         ?int $customstart = null,
         ?int $customend = null
-    ): \stdClass {
+    ): stdClass {
         return self::create_goal_record(
             $userid,
             $courseid,
@@ -132,7 +138,7 @@ final class api {
      * @param ?int $customstart Parameter customstart.
      * @param ?int $customend Parameter customend.
      * @param bool $trustedrewards Parameter trustedrewards.
-     * @return \stdClass Return value.
+     * @return stdClass Return value.
      */
     private static function create_goal_record(
         int $userid,
@@ -145,26 +151,26 @@ final class api {
         ?int $customstart,
         ?int $customend,
         bool $trustedrewards
-    ): \stdClass {
+    ): stdClass {
         global $DB, $USER;
 
-        $context = \context_course::instance($courseid);
+        $context = context_course::instance($courseid);
         if ((int)$USER->id !== $userid || !has_capability('local/personalgoals:manageown', $context)) {
-            throw new \moodle_exception('cannotcreategoal', 'local_personalgoals');
+            throw new moodle_exception('cannotcreategoal', 'local_personalgoals');
         }
         $types = goal_type_manager::get_types();
         if (!isset($types[$goaltype])) {
-            throw new \moodle_exception('unknowngoaltype', 'local_personalgoals', '', $goaltype);
+            throw new moodle_exception('unknowngoaltype', 'local_personalgoals', '', $goaltype);
         }
         $name = trim(clean_param($name, PARAM_TEXT));
         if ($name === '') {
-            throw new \moodle_exception('goalnamerequired', 'local_personalgoals');
+            throw new moodle_exception('goalnamerequired', 'local_personalgoals');
         }
         if ($targetvalue <= 0) {
-            throw new \moodle_exception('targetmustbepositive', 'local_personalgoals');
+            throw new moodle_exception('targetmustbepositive', 'local_personalgoals');
         }
         if (!in_array($periodtype, ['daily', 'weekly', 'monthly', 'custom', 'none'], true)) {
-            throw new \moodle_exception('invalidperiod', 'local_personalgoals');
+            throw new moodle_exception('invalidperiod', 'local_personalgoals');
         }
 
         if ($goaltype === 'specific_activities') {
@@ -173,13 +179,13 @@ final class api {
             $cmids = array_values(array_filter($cmids, static fn(int $cmid): bool => isset($modinfo->cms[$cmid])));
             $config['cmids'] = $cmids;
             if (!$cmids) {
-                throw new \moodle_exception('selectatleastoneactivity', 'local_personalgoals');
+                throw new moodle_exception('selectatleastoneactivity', 'local_personalgoals');
             }
             $targetvalue = count($cmids);
         }
 
         if ($goaltype === 'course_completion' && $targetvalue > 100) {
-            throw new \moodle_exception('percentagecannotexceed100', 'local_personalgoals');
+            throw new moodle_exception('percentagecannotexceed100', 'local_personalgoals');
         }
 
         [$timestart, $timeend] = period::resolve($periodtype, $userid, time(), $customstart, $customend);
@@ -193,7 +199,7 @@ final class api {
         if ($goaltype === 'xp') {
             $currentxp = integrations::current_xp($userid, $courseid);
             if ($currentxp === null) {
-                throw new \moodle_exception('xpunavailable', 'local_personalgoals');
+                throw new moodle_exception('xpunavailable', 'local_personalgoals');
             }
             $config['xpbaseline'] = $currentxp;
         }
@@ -216,7 +222,7 @@ final class api {
         $type = new $types[$goaltype]($candidate);
         $errors = $type->validate_configuration($config);
         if ($errors) {
-            throw new \moodle_exception('invalidgoalconfiguration', 'local_personalgoals', '', implode('; ', array_values($errors)));
+            throw new moodle_exception('invalidgoalconfiguration', 'local_personalgoals', '', implode('; ', array_values($errors)));
         }
 
         $transaction = $DB->start_delegated_transaction();
@@ -227,7 +233,7 @@ final class api {
         }
         progress::set_value((int)$candidate->id, $initial, []);
         if ($goaltype === 'specific_activities') {
-            $completion = new \completion_info(get_course($courseid));
+            $completion = new completion_info(get_course($courseid));
             $modinfo = get_fast_modinfo($courseid, $userid);
             foreach ($config['cmids'] as $cmid) {
                 if (!isset($modinfo->cms[$cmid])) {
@@ -294,7 +300,7 @@ final class api {
 
         $config = json::decode($locked->configjson);
         event\goal_completed::create([
-            'context' => \context_course::instance($locked->courseid),
+            'context' => context_course::instance($locked->courseid),
             'objectid' => $locked->id,
             'relateduserid' => $locked->userid,
             'other' => [
@@ -340,7 +346,7 @@ final class api {
         $transaction->allow_commit();
 
         event\goal_expired::create([
-            'context' => \context_course::instance($goal->courseid),
+            'context' => context_course::instance($goal->courseid),
             'objectid' => $goal->id,
             'relateduserid' => $goal->userid,
             'other' => ['goaltype' => $goal->goaltype],
@@ -357,9 +363,9 @@ final class api {
     public static function cancel_goal(int $goalid): bool {
         global $DB, $USER;
         $goal = $DB->get_record('local_personalgoals_goals', ['id' => $goalid], '*', MUST_EXIST);
-        $context = \context_course::instance($goal->courseid);
+        $context = context_course::instance($goal->courseid);
         if ((int)$USER->id !== (int)$goal->userid || !has_capability('local/personalgoals:manageown', $context)) {
-            throw new \moodle_exception('cannotcancelgoal', 'local_personalgoals');
+            throw new moodle_exception('cannotcancelgoal', 'local_personalgoals');
         }
         if ($goal->status !== self::STATUS_ACTIVE) {
             return false;
@@ -381,13 +387,13 @@ final class api {
      *
      * @param int $templateid Parameter templateid.
      * @param int $userid Parameter userid.
-     * @return \stdClass Return value.
+     * @return stdClass Return value.
      */
-    public static function accept_template(int $templateid, int $userid): \stdClass {
+    public static function accept_template(int $templateid, int $userid): stdClass {
         global $DB, $USER;
         $template = $DB->get_record('local_personalgoals_template', ['id' => $templateid, 'active' => 1], '*', MUST_EXIST);
         if ((int)$USER->id !== $userid) {
-            throw new \moodle_exception('cannotaccepttemplate', 'local_personalgoals');
+            throw new moodle_exception('cannotaccepttemplate', 'local_personalgoals');
         }
         $config = json::decode($template->configjson);
         $config['templateid'] = (int)$template->id;
@@ -409,13 +415,13 @@ final class api {
      * Method recreate_goal.
      *
      * @param int $goalid Parameter goalid.
-     * @return \stdClass Return value.
+     * @return stdClass Return value.
      */
-    public static function recreate_goal(int $goalid): \stdClass {
+    public static function recreate_goal(int $goalid): stdClass {
         global $DB, $USER;
         $goal = $DB->get_record('local_personalgoals_goals', ['id' => $goalid], '*', MUST_EXIST);
         if ((int)$USER->id !== (int)$goal->userid) {
-            throw new \moodle_exception('cannotrecreategoal', 'local_personalgoals');
+            throw new moodle_exception('cannotrecreategoal', 'local_personalgoals');
         }
         $config = json::decode($goal->configjson);
         $periodtype = $config['periodtype'] ?? 'none';
