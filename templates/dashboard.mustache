@@ -1,0 +1,98 @@
+{{!
+    This file is part of Moodle - https://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_personalgoals/dashboard
+
+    Example context (json):
+    {
+        Aqui tem que criar o context em inglês
+    }
+}}
+<div class="local-personalgoals" data-region="personalgoals-dashboard">
+    <div class="personalgoals-toolbar">
+        <div>
+            <h2>{{#str}}mygoals, local_personalgoals{{/str}}</h2>
+            <p class="text-muted mb-0">{{#str}}dashboardintro, local_personalgoals{{/str}}</p>
+        </div>
+        <div class="personalgoals-actions">
+            {{#cancreate}}<a class="btn btn-primary" href="{{{creategoalurl}}}">{{#str}}creategoal, local_personalgoals{{/str}}</a>{{/cancreate}}
+            <a class="btn btn-secondary" href="{{{historyurl}}}">{{#str}}goalhistory, local_personalgoals{{/str}}</a>
+            {{#canmanage}}<a class="btn btn-secondary" href="{{{manageurl}}}">{{#str}}managegoals, local_personalgoals{{/str}}</a>{{/canmanage}}
+        </div>
+    </div>
+
+    <section class="personalgoals-section" aria-labelledby="active-goals-heading">
+        <h3 id="active-goals-heading">{{#str}}activegoals, local_personalgoals{{/str}}</h3>
+        {{^hasactivegoals}}
+            <div class="personalgoals-empty">
+                <strong>{{#str}}noactivegoals, local_personalgoals{{/str}}</strong>
+                <span>{{#str}}noactivegoalsdesc, local_personalgoals{{/str}}</span>
+            </div>
+        {{/hasactivegoals}}
+        <div class="personalgoals-grid">
+            {{#activegoals}}
+                <article class="personalgoals-card" data-goal-id="{{id}}">
+                    <div class="personalgoals-card-head">
+                        <div>
+                            <div class="personalgoals-course">{{coursename}}</div>
+                            <h4>{{name}}</h4>
+                        </div>
+                        <span class="badge badge-light">{{periodlabel}}</span>
+                    </div>
+                    <div class="personalgoals-values"><strong>{{current}}</strong><span>/ {{target}}</span></div>
+                    <div class="progress personalgoals-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{progress}}" aria-label="{{name}}">
+                        <div class="progress-bar" style="width: {{progress}}%"></div>
+                    </div>
+                    <div class="personalgoals-card-foot">
+                        <span>{{progress}}%</span>
+                        {{#hasdeadline}}<span>{{#str}}until, local_personalgoals{{/str}} {{deadline}}</span>{{/hasdeadline}}
+                    </div>
+                    <div class="personalgoals-card-actions">
+                        <a class="btn btn-sm btn-link text-muted" href="{{{cancelurl}}}" data-action="cancel-goal">{{#str}}cancelgoal, local_personalgoals{{/str}}</a>
+                    </div>
+                </article>
+            {{/activegoals}}
+        </div>
+    </section>
+
+    {{#courseid}}
+    <section class="personalgoals-section" aria-labelledby="suggested-goals-heading">
+        <div class="personalgoals-section-head">
+            <div>
+                <h3 id="suggested-goals-heading">{{#str}}suggestedgoals, local_personalgoals{{/str}}</h3>
+                <p class="text-muted">{{#str}}suggestedgoalsdesc, local_personalgoals{{/str}}</p>
+            </div>
+        </div>
+        {{#hassuggestions}}
+            <div class="personalgoals-suggestions">
+                {{#suggestions}}
+                    <article class="personalgoals-suggestion">
+                        <div>
+                            <div class="personalgoals-suggestion-meta">{{type}} · {{period}}</div>
+                            <h4>{{name}}</h4>
+                            {{#description}}<p>{{{description}}}</p>{{/description}}
+                            <span class="personalgoals-target">{{#str}}target, local_personalgoals{{/str}}: {{target}}</span>
+                        </div>
+                        <a class="btn btn-outline-primary" href="{{{accepturl}}}">{{#str}}acceptgoal, local_personalgoals{{/str}}</a>
+                    </article>
+                {{/suggestions}}
+            </div>
+        {{/hassuggestions}}
+        {{^hassuggestions}}<p class="text-muted">{{#str}}nosuggestions, local_personalgoals{{/str}}</p>{{/hassuggestions}}
+    </section>
+    {{/courseid}}
+</div>

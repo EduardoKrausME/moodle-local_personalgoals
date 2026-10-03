@@ -1,0 +1,73 @@
+{{!
+    This file is part of Moodle - https://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_personalgoals/history
+
+    Example context (json):
+    {
+        Aqui tem que criar o context em inglês
+    }
+}}
+<div class="local-personalgoals personalgoals-history">
+    <div class="personalgoals-toolbar">
+        <div>
+            <h2>{{#str}}goalhistory, local_personalgoals{{/str}}</h2>
+            <p class="text-muted mb-0">{{#str}}historyintro, local_personalgoals{{/str}}</p>
+        </div>
+        <a class="btn btn-secondary" href="{{{backurl}}}">{{#str}}backtogoals, local_personalgoals{{/str}}</a>
+    </div>
+
+    {{#hasmonths}}
+    <section class="personalgoals-section">
+        <h3>{{#str}}monthlyevolution, local_personalgoals{{/str}}</h3>
+        <div class="personalgoals-months">
+            {{#months}}
+                <div class="personalgoals-month-card">
+                    <strong>{{label}}</strong>
+                    <span>{{#str}}createdcount, local_personalgoals{{/str}}: {{created}}</span>
+                    <span>{{#str}}completedcount, local_personalgoals{{/str}}: {{completed}}</span>
+                    <span>{{#str}}expiredcount, local_personalgoals{{/str}}: {{expired}}</span>
+                </div>
+            {{/months}}
+        </div>
+    </section>
+    {{/hasmonths}}
+
+    <section class="personalgoals-section">
+        <h3>{{#str}}allgoals, local_personalgoals{{/str}}</h3>
+        {{^hasgoals}}<div class="personalgoals-empty">{{#str}}nogoalhistory, local_personalgoals{{/str}}</div>{{/hasgoals}}
+        <div class="personalgoals-history-list">
+            {{#goals}}
+                <article class="personalgoals-history-item">
+                    <div class="personalgoals-history-main">
+                        <div class="personalgoals-course">{{coursename}}</div>
+                        <h4>{{name}}</h4>
+                        {{#isexpired}}<p class="personalgoals-neutral-message">{{expiredmessage}}</p>{{/isexpired}}
+                        {{^isexpired}}<p class="text-muted mb-0">{{current}} / {{target}}</p>{{/isexpired}}
+                    </div>
+                    <div class="personalgoals-history-side">
+                        <span class="personalgoals-status personalgoals-status-{{status}}">{{statuslabel}}</span>
+                        <div class="progress personalgoals-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{progress}}">
+                            <div class="progress-bar" style="width: {{progress}}%"></div>
+                        </div>
+                        {{^isactive}}<a class="btn btn-sm btn-outline-secondary" href="{{{repeaturl}}}">{{#str}}createagain, local_personalgoals{{/str}}</a>{{/isactive}}
+                    </div>
+                </article>
+            {{/goals}}
+        </div>
+    </section>
+</div>
