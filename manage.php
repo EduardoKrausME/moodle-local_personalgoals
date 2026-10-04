@@ -8,7 +8,7 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
@@ -47,7 +47,8 @@ foreach ($DB->get_records('local_personalgoals_template', ['courseid' => $course
         'goaltype' => goal_type_manager::get_type_name($template->goaltype, $courseid),
         'active' => (bool)$template->active,
         'activelabel' => $template->active ? get_string('yes') : get_string('no'),
-        'editurl' => (new moodle_url('/local/personalgoals/template_edit.php', ['courseid' => $courseid, 'id' => $template->id]))->out(false),
+        'editurl' => (new moodle_url('/local/personalgoals/template_edit.php',
+            ['courseid' => $courseid, 'id' => $template->id]))->out(false),
     ];
 }
 
