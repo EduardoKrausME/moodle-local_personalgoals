@@ -28,7 +28,7 @@ use advanced_testcase;
 use context_course;
 use local_personalgoals\service\event_dedupe;
 
-defined('MOODLE_INTERNAL') || die();
+defined('MOODLE_INTERNAL') || die;
 
 /**
  * Class event_dedupe_test.

@@ -27,7 +27,7 @@ namespace local_personalgoals\form;
 use local_personalgoals\goal_type_manager;
 use moodleform;
 
-defined('MOODLE_INTERNAL') || die();
+defined('MOODLE_INTERNAL') || die;
 require_once($CFG->libdir . '/formslib.php');
 
 /**
