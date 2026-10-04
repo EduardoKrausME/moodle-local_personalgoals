@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <https://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
  * Personal goals for learner self-regulation.
@@ -26,8 +26,6 @@ namespace local_personalgoals\event;
 
 use core\event\base;
 use moodle_url;
-
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Class goal_created.
@@ -43,20 +41,26 @@ final class goal_created extends base {
         $this->data['crud'] = 'c';
         $this->data['edulevel'] = self::LEVEL_PARTICIPATING;
     }
+
     /**
      * Method get_name.
      *
      * @return string Return value.
      */
-    public static function get_name(): string { return get_string('eventgoalcreated', 'local_personalgoals'); }
+    public static function get_name(): string {
+        return get_string('eventgoalcreated', 'local_personalgoals');
+    }
+
     /**
      * Method get_description.
      *
      * @return string Return value.
      */
     public function get_description(): string {
-        return "The user with id '{$this->relateduserid}' created personal goal '{$this->objectid}' in course '{$this->courseid}'.";
+        return "The user with id '{$this->relateduserid}' created personal goal " .
+            "'{$this->objectid}' in course '{$this->courseid}'.";
     }
+
     /**
      * Method get_url.
      *
@@ -65,6 +69,7 @@ final class goal_created extends base {
     public function get_url(): moodle_url {
         return new moodle_url('/local/personalgoals/index.php', ['courseid' => $this->courseid]);
     }
+
     /**
      * Method get_objectid_mapping.
      *

@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <https://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
  * Personal goals for learner self-regulation.
@@ -27,8 +27,6 @@ namespace local_personalgoals\service;
 use local_personalgoals\api;
 use moodle_url;
 use stdClass;
-
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Class presenter.
@@ -65,7 +63,8 @@ final class presenter {
             'isexpired' => $status === api::STATUS_EXPIRED,
             'iscancelled' => $status === api::STATUS_CANCELLED,
             'hasdeadline' => (int)$goal->timeend > 0,
-            'deadline' => (int)$goal->timeend > 0 ? userdate((int)$goal->timeend, get_string('strftimedatetime', 'langconfig')) : '',
+            'deadline' => (int)$goal->timeend > 0 ? userdate((int)$goal->timeend,
+                get_string('strftimedatetime', 'langconfig')) : '',
             'periodlabel' => get_string('period' . $period, 'local_personalgoals'),
             'expiredmessage' => get_string('expiredneutral', 'local_personalgoals', (object)[
                 'current' => $current,

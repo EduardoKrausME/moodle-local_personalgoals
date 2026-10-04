@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <https://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
  * Personal goals for learner self-regulation.
@@ -26,8 +26,6 @@ namespace local_personalgoals\event;
 
 use core\event\base;
 use moodle_url;
-
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Class goal_cancelled.
@@ -48,14 +46,17 @@ final class goal_cancelled extends base {
      *
      * @return string Return value.
      */
-    public static function get_name(): string { return get_string('eventgoalcancelled', 'local_personalgoals'); }
+    public static function get_name(): string {
+        return get_string('eventgoalcancelled', 'local_personalgoals');
+    }
     /**
      * Method get_description.
      *
      * @return string Return value.
      */
     public function get_description(): string {
-        return "The user with id '{$this->relateduserid}' cancelled personal goal '{$this->objectid}' in course '{$this->courseid}'.";
+        return "The user with id '{$this->relateduserid}' cancelled personal goal " .
+            "'{$this->objectid}' in course '{$this->courseid}'.";
     }
     /**
      * Method get_url.

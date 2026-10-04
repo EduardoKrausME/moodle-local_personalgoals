@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <https://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
  * Personal goals for learner self-regulation.
@@ -70,8 +70,10 @@ final class goal_form extends moodleform {
         $mform->addElement('select', 'periodtype', get_string('period', 'local_personalgoals'), $periods);
         $mform->setDefault('periodtype', 'weekly');
 
-        $mform->addElement('date_time_selector', 'customstart', get_string('customstart', 'local_personalgoals'), ['optional' => true]);
-        $mform->addElement('date_time_selector', 'customend', get_string('customend', 'local_personalgoals'), ['optional' => true]);
+        $mform->addElement('date_time_selector', 'customstart',
+            get_string('customstart', 'local_personalgoals'), ['optional' => true]);
+        $mform->addElement('date_time_selector', 'customend',
+            get_string('customend', 'local_personalgoals'), ['optional' => true]);
         $mform->hideIf('customstart', 'periodtype', 'neq', 'custom');
         $mform->hideIf('customend', 'periodtype', 'neq', 'custom');
 

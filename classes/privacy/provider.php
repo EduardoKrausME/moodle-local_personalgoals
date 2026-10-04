@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <https://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
  * Personal goals for learner self-regulation.
@@ -31,8 +31,6 @@ use core_privacy\local\request\approved_contextlist;
 use core_privacy\local\request\contextlist;
 use core_privacy\local\request\transform;
 use core_privacy\local\request\writer;
-
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Class provider.

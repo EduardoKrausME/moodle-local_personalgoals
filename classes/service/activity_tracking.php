@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <https://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
  * Personal goals for learner self-regulation.
@@ -26,13 +26,15 @@ namespace local_personalgoals\service;
 
 use dml_write_exception;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Class activity_tracking.
  */
 final class activity_tracking {
+
+    /** @var int */
     private const MAX_SESSION_GAP = 1800;
+
+    /** @var int */
     private const MAX_CREDITED_INTERVAL = 900;
 
     /**
@@ -91,7 +93,7 @@ final class activity_tracking {
         ];
         try {
             $DB->insert_record('local_personalgoals_days', $record);
-        } catch (dml_write_exception $e) {
+        } catch (dml_write_exception $e) { // phpcs:disable Generic.CodeAnalysis.EmptyStatement.DetectedCatch
             // Expected when this study day has already been registered.
         }
     }
@@ -135,7 +137,7 @@ final class activity_tracking {
                     'lastactivity' => $timestamp,
                     'timemodified' => time(),
                 ]);
-            } catch (dml_write_exception $e) {
+            } catch (dml_write_exception $e) { // phpcs:disable Generic.CodeAnalysis.EmptyStatement.DetectedCatch
                 // A concurrent event created the session. The next interaction will account for time.
             }
         }

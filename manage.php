@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <https://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
  * Personal goals for learner self-regulation.
@@ -54,7 +54,13 @@ foreach ($DB->get_records('local_personalgoals_template', ['courseid' => $course
 $limitrows = [];
 if (has_capability('local/personalgoals:managelimits', $context)) {
     foreach (goal_type_manager::get_types() as $key => $classname) {
-        $dummy = (object)['id' => 0, 'userid' => $USER->id, 'courseid' => $courseid, 'targetvalue' => 1, 'configjson' => null];
+        $dummy = (object)[
+            'id' => 0,
+            'userid' => $USER->id,
+            'courseid' => $courseid,
+            'targetvalue' => 1,
+            'configjson' => null,
+        ];
         $instance = new $classname($dummy);
         $limit = limits::get($courseid, $key);
         $limitrows[] = [
@@ -64,7 +70,8 @@ if (has_capability('local/personalgoals:managelimits', $context)) {
             'enabledlabel' => $limit->enabled ? get_string('yes') : get_string('no'),
             'range' => format_float($limit->mintarget, 0) . ' – ' . format_float($limit->maxtarget, 0),
             'maxactive' => (int)$limit->maxactive,
-            'editurl' => (new moodle_url('/local/personalgoals/limit_edit.php', ['courseid' => $courseid, 'goaltype' => $key]))->out(false),
+            'editurl' => (new moodle_url('/local/personalgoals/limit_edit.php',
+                ['courseid' => $courseid, 'goaltype' => $key]))->out(false),
         ];
     }
 }

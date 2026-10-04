@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <https://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
  * Personal goals for learner self-regulation.
@@ -81,10 +81,13 @@ $data = [
     'suggestions' => $suggestions,
     'hassuggestions' => !empty($suggestions),
     'cancreate' => $courseid > 0 && has_capability('local/personalgoals:manageown', $context),
-    'creategoalurl' => $courseid > 0 ? (new moodle_url('/local/personalgoals/edit.php', ['courseid' => $courseid]))->out(false) : '',
-    'historyurl' => (new moodle_url('/local/personalgoals/history.php', $courseid ? ['courseid' => $courseid] : []))->out(false),
+    'creategoalurl' => $courseid > 0 ? (new moodle_url('/local/personalgoals/edit.php',
+        ['courseid' => $courseid]))->out(false) : '',
+    'historyurl' => (new moodle_url('/local/personalgoals/history.php', $courseid ?
+        ['courseid' => $courseid] : []))->out(false),
     'canmanage' => $courseid > 0 && has_capability('local/personalgoals:managetemplates', $context),
-    'manageurl' => $courseid > 0 ? (new moodle_url('/local/personalgoals/manage.php', ['courseid' => $courseid]))->out(false) : '',
+    'manageurl' => $courseid > 0 ? (new moodle_url('/local/personalgoals/manage.php',
+        ['courseid' => $courseid]))->out(false) : '',
 ];
 
 echo $OUTPUT->header();
