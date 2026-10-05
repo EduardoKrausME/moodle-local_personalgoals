@@ -25,7 +25,7 @@
 defined('MOODLE_INTERNAL') || die;
 
 $plugin->version = 2026100300;
-$plugin->release = '1.0.0';
+$plugin->release = '1.0.1';
 $plugin->component = 'local_personalgoals';
 $plugin->requires = 2022112800;
 $plugin->maturity = MATURITY_STABLE;
