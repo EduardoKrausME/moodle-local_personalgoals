@@ -227,7 +227,7 @@ final class goal_api_test extends advanced_testcase {
         $updated = $DB->get_record('local_personalgoals_goals', ['id' => $goal->id], '*', MUST_EXIST);
         $config = json::decode($updated->configjson);
         $this->assertSame([(int)$cm1->id], array_values(array_map('intval', $config['cmids'])));
-        $this->assertContains($cm2->id, array_map('intval', $config['missingactivities']));
+        $this->assertContains((int)$cm2->id, array_map('intval', $config['missingactivities']));
         $this->assertEquals(1.0, (float)$updated->targetvalue);
         $this->assertSame(api::STATUS_ACTIVE, $updated->status);
     }
