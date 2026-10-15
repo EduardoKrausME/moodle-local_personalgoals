@@ -41,6 +41,14 @@ final class course_progress {
         if (!$course) {
             return 0.0;
         }
+        // Course completion can change after the progress service cached a value earlier in the request.
+        // Check the authoritative completion record first so a freshly completed course reaches 100%.
+        $completion = new \completion_info($course);
+        if ($completion->is_enabled() && $completion->is_tracked_user($userid) &&
+                $completion->is_course_complete($userid)) {
+            return 100.0;
+        }
+
         $percentage = \core_completion\progress::get_course_progress_percentage($course, $userid);
         if ($percentage === null) {
             return 0.0;

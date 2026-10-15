@@ -243,10 +243,14 @@ final class goal_api_test extends advanced_testcase {
         [$user, $course] = $this->create_student_course();
         $goal = api::create_goal($user->id, $course->id, 'course_completion', 'Finish the course', 100);
 
+        // Prime the request cache before the course has been marked complete.
+        $this->assertSame(0.0, \local_personalgoals\service\course_progress::percentage($user->id, $course->id));
+
         require_once($CFG->dirroot . '/completion/completion_completion.php');
         $completion = new completion_completion(['userid' => $user->id, 'course' => $course->id]);
         $completion->mark_complete(time());
 
+        $this->assertSame(100.0, \local_personalgoals\service\course_progress::percentage($user->id, $course->id));
         $updated = $DB->get_record('local_personalgoals_goals', ['id' => $goal->id], '*', MUST_EXIST);
         $this->assertSame(api::STATUS_COMPLETED, $updated->status);
         $this->assertSame(100.0, api::get_goal_progress($goal->id)['percentage']);
