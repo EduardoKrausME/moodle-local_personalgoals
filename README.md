@@ -8,13 +8,13 @@ There is no ranking, leaderboard, best-student indicator, class average used as 
 
 The initial goal types are:
 
-- **XP** — gain a chosen amount of XP after the goal starts. When `local_personalxp` is available, the current total is read through its public service API and the goal stores a baseline instead of reading its database tables.
-- **Active days** — study on a chosen number of distinct learner-local calendar days.
-- **Activity completion** — complete a chosen number of activities after the goal starts.
-- **Course completion** — reach a chosen percentage of overall course progress.
-- **Quiz attempts** — submit a chosen number of quiz attempts.
-- **Specific activities** — complete a selected set of course activities.
-- **Study time** — accumulate study minutes from meaningful course interactions. Long gaps are not treated as continuous study time.
+- **XP** - gain a chosen amount of XP after the goal starts. When `local_personalxp` is available, the current total is read through its public service API and the goal stores a baseline instead of reading its database tables.
+- **Active days** - study on a chosen number of distinct learner-local calendar days.
+- **Activity completion** - complete a chosen number of activities after the goal starts.
+- **Course completion** - reach a chosen percentage of overall course progress.
+- **Quiz attempts** - submit a chosen number of quiz attempts.
+- **Specific activities** - complete a selected set of course activities.
+- **Study time** - accumulate study minutes from meaningful course interactions. Long gaps are not treated as continuous study time.
 
 A goal may apply to today, the current week, the current month, a custom date range, or have no deadline. Daily, weekly and monthly boundaries use the learner's Moodle timezone.
 
@@ -22,9 +22,9 @@ A goal may apply to today, the current week, the current month, a custom date ra
 
 The learner opens **My goals**, creates a personal goal, and follows a progress bar such as:
 
-- Study on 3 days this week — 2 / 3
-- Complete 5 activities — 3 / 5
-- Gain 500 XP — 460 / 500 XP
+- Study on 3 days this week - 2 / 3
+- Complete 5 activities - 3 / 5
+- Gain 500 XP - 460 / 500 XP
 
 A completed goal moves to the personal history. A learner can also cancel an active goal or create a new goal based on an older one.
 
